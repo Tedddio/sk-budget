@@ -12,8 +12,8 @@ datasource db {
 model User {
   id           String    @id @unique
   email        String    @unique
-  first_name   String
-  last_name   String
+  firstname   String
+  lastname   String
   auth_session Session[]
   key          Key[]
 }
