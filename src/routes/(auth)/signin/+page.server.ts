@@ -2,13 +2,7 @@ import { auth } from "$lib/server/lucia";
 import { LuciaError } from "lucia";
 import { fail, redirect } from "@sveltejs/kit";
 
-import type { Actions, PageServerLoad } from "./$types";
-
-export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.auth.validate();
-	if (session) throw redirect(302, "/");
-	return {};
-};
+import type { Actions } from "./$types";
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -30,6 +24,7 @@ export const actions: Actions = {
 			});
 			locals.auth.setSession(session); // set session cookie
 		} catch (e) {
+            console.log(e)
 			if (
 				e instanceof LuciaError &&
 				(e.message === "AUTH_INVALID_KEY_ID" ||
