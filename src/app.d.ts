@@ -7,7 +7,8 @@ declare global {
         // interface Platform {}
         interface Locals {
             auth: import("lucia").AuthRequest;
-            session: Session | null;
+            session: import("lucia").Session | null;
+            user: import("lucia").User | undefined
         }
     }
 	namespace Lucia {
@@ -17,7 +18,7 @@ declare global {
 			lastname: string;
 			email: string;
 		};
-		type DatabaseSessionAttributes = Record<string, never>;
+        type DatabaseSessionAttributes = {};
 	}
 }
 

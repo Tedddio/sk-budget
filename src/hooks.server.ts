@@ -6,15 +6,16 @@ export const handle: Handle = async ({ event, resolve }) => {
     const session = await authRequest.validate();
 
     if (isRouteProtected(event.route.id) && !session) {
-        throw redirect(301, '/login')
+        throw redirect(301, '/signin')
     }
 
     if (isAuthRoute(event.route.id) && session) {
         throw redirect(301, '/')
     }
 
-    event.locals.session = session;
     event.locals.auth = authRequest;
+    event.locals.session = session;
+    event.locals.user = session?.user;
     return await resolve(event)
 }
 
@@ -25,3 +26,4 @@ function isRouteProtected(routeId: string | null): boolean {
 function isAuthRoute(routeId: string | null): boolean {
     return !routeId ? false : routeId.includes('/(auth)')
 }
+
