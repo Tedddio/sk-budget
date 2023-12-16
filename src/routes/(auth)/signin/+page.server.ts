@@ -3,20 +3,30 @@ import { LuciaError } from "lucia";
 import { fail, redirect } from "@sveltejs/kit";
 
 import type { Actions } from "./$types";
+import { signinSchema } from "$lib/schemas/signinSchema";
 
 export const actions: Actions = {
     default: async ({ request, locals }) => {
         const formData = await request.formData();
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
+        const user = {
+            email: formData.get("email") as string,
+            password: formData.get("password") as string,
+        }
+
+        const parsed = signinSchema.safeParse(user);
+        if (!parsed.success) {
+            return fail(400, { errors: parsed.error.format() });
+        }
+
+
         // Todo: Validation
         try {
             // find user by key
             // and validate password
             const key = await auth.useKey(
                 "email",
-                email.toLowerCase(),
-                password
+                user.email.toLowerCase(),
+                user.password
             );
             const session = await auth.createSession({
                 userId: key.userId,
@@ -33,7 +43,7 @@ export const actions: Actions = {
                 // user does not exist
                 // or invalid password
                 return fail(400, {
-                    message: "Incorrect username or password"
+                    message: "Invalid credentials"
                 });
             }
             return fail(500, {
