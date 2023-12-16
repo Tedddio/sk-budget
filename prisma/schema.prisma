@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 model User {
@@ -16,6 +16,7 @@ model User {
   lastname   String
   auth_session Session[]
   key          Key[]
+  transactions Transaction[]
 }
 
 model Session {
@@ -35,4 +36,21 @@ model Key {
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
   @@index([user_id])
+}
+
+model Transaction {
+  id              String  @id @unique
+  title           String
+  description     String?
+  transaction_type TransactionType @default(EXPENSE)
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+
+enum TransactionType {
+  EXPENSE
+  INCOME
 }
