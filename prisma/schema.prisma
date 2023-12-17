@@ -43,6 +43,7 @@ model Transaction {
   title           String
   description     String?
   transaction_type TransactionType @default(EXPENSE)
+  amount          Float
   user_id         String
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
