@@ -31,8 +31,7 @@
         <nav
             class="md:ml-auto flex flex-wrap items-center text-base justify-center"
         >
-            <p class="mr-5 hover:text-gray-900">Third Link</p>
-            <p class="mr-5 hover:text-gray-900">Fourth Link</p>
+            <a href="/transactions" class="mr-5 hover:text-gray-900">Transactions</a>
         </nav>
         {#if user}
             <form method="POST">
