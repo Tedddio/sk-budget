@@ -2,8 +2,9 @@
     import { enhance } from "$app/forms";
     import Alert from "$lib/components/Alert.svelte";
     import InputError from "$lib/components/InputError.svelte";
+    import type { ActionData } from "./$types";
 
-    export let form;
+    export let form: ActionData;
 </script>
 
 <h2

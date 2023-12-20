@@ -2,8 +2,9 @@
     import { enhance } from "$app/forms";
     import InputError from "$lib/components/InputError.svelte";
     import Alert from "$lib/components/Alert.svelte";
+    import type { ActionData } from "./$types";
 
-    export let form;
+    export let form: ActionData;
 </script>
 
 <h2
@@ -96,7 +97,7 @@
         <div>
             <div class="flex items-center justify-between">
                 <label
-                    for="password"
+                    for="confirmPassword"
                     class="block text-sm font-medium leading-6 text-gray-900"
                     >Confirm Password</label
                 >
