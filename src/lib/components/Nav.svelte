@@ -31,7 +31,9 @@
         <nav
             class="md:ml-auto flex flex-wrap items-center text-base justify-center"
         >
-            <a href="/transactions" class="mr-5 hover:text-gray-900">Transactions</a>
+            <a href="/transactions" class="mr-5 hover:text-gray-900"
+                >Transactions</a
+            >
         </nav>
         {#if user}
             <form method="POST">
