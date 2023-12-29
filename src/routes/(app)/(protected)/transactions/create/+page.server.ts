@@ -1,7 +1,7 @@
 import { redirect, type Actions, fail } from "@sveltejs/kit";
 import type { TransactionType } from "@prisma/client";
-import prisma from "$lib/prisma";
 import { createTransactionSchema } from "$lib/schemas/transactionSchema";
+import TransactionService from "$lib/services/TransactionService";
 
 export const actions: Actions = {
     default: async ({ request, locals }) => {
@@ -10,7 +10,6 @@ export const actions: Actions = {
         const formData = await request.formData();
 
         const transaction = {
-            user_id: user.userId,
             title: formData.get("title") as string,
             description: formData.get("description") as string,
             amount: parseFloat(formData.get("amount") as string),
@@ -25,13 +24,12 @@ export const actions: Actions = {
         }
 
         try {
-            await prisma.transaction.create({
-            data: transaction
-            });
+            const transactionService = new TransactionService();
+            await transactionService.create(transaction, user.userId);
         } catch (e) {
             console.log(e);
             return fail(500, {
-                message: "An unknown error occurred"
+                message: "An error occurred"
             });
         }
 

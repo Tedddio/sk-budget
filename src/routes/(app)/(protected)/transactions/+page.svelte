@@ -1,18 +1,9 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import { capitalizeFirstLetter } from "$lib/helpers/stringHelper";
-    import { TransactionType, type Transaction } from "@prisma/client";
+    import { TransactionType } from "@prisma/client";
 
     export let data: PageData;
-
-    const reducer = (accumulator: number, item: Transaction) => {
-        if (item.transaction_type == TransactionType.EXPENSE) {
-            return accumulator - item.amount;
-        }
-        return accumulator + item.amount;
-    };
-
-    const total = data.transactions.reduce(reducer, 0);
 
     function getTransactionTypeColor(type: TransactionType) {
         if (type == TransactionType.INCOME) {
@@ -32,7 +23,9 @@
 </div>
 <section class="text-gray-600 body-font">
     <div class="container px-5 py-24 mx-auto">
-        {#if data.transactions.length == 0}
+        {#if data.status == 500 || !data.transactions}
+            <p class="text-center text-xl text-red-300">{data.data?.message}</p>
+        {:else if data.transactions?.length == 0}
             <p class="text-center text-xl">No transactions yet</p>
         {:else}
             <div class="lg:w-2/3 w-full mx-auto overflow-auto">
@@ -87,7 +80,9 @@
                     </tbody>
                 </table>
             </div>
-            <p class="text-center text-md mt-10">Total is { total.toFixed(2) } $</p>
+            <p class="text-center text-md mt-10">
+                Total is {data.total.toFixed(2)} $
+            </p>
         {/if}
     </div>
 </section>

@@ -8,3 +8,6 @@ export const createTransactionSchema = z.object({
     transaction_type: z.nativeEnum(TransactionType),
     date: z.date()
 })
+
+export type CreateTransaction = z.infer<typeof createTransactionSchema>;
+
