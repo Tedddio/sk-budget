@@ -1,14 +1,15 @@
 <script lang="ts">
     import { capitalizeFirstLetter } from "$lib/helpers/stringHelper";
     import type { BudgetItem, TransactionType } from "@prisma/client";
+    import DeleteBudgetItem from "./DeleteBudgetItem.svelte";
 
     export let budgetItems: BudgetItem[];
     export let type: TransactionType;
 
     function getTotal(): string | undefined {
-        if (!budgetItems) return ;
+        if (!budgetItems) return;
         const total = budgetItems.reduce((acc, curr) => {
-            return acc + curr.amount
+            return acc + curr.amount;
         }, 0);
         return total.toFixed(2);
     }
@@ -41,6 +42,9 @@
                             class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100"
                             >Frequency</th
                         >
+                        <th
+                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100"
+                        />
                     </tr>
                 </thead>
                 <tbody>
@@ -53,6 +57,9 @@
                             <td class="px-4 py-3"
                                 >{capitalizeFirstLetter(item.frequency)}</td
                             >
+                            <td class="px-4 py-3">
+                                <DeleteBudgetItem budgetItem={item} action="/budget?/delete" />
+                            </td>
                         </tr>
                     {/each}
                 </tbody>

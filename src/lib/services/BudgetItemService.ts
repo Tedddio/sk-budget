@@ -10,6 +10,13 @@ export default class BudgetItemService {
         });
     }
 
+    async delete(budgetItemId: string, userId: number) {
+        await prisma.$queryRaw<BudgetItem>`
+            DELETE FROM "BudgetItem"
+            WHERE "userId" = ${userId}
+            AND "id" = ${budgetItemId};`;
+    }
+
     async getAll(userId: string): Promise<BudgetItemsByType> {
         // TODO: Should I split sql or manupulate the array
         const expenses = await prisma.$queryRaw<BudgetItem[]>`

@@ -1,6 +1,6 @@
 import { fail, redirect } from "@sveltejs/kit";
 
-import type { PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 import BudgetItemService from "$lib/services/BudgetItemService";
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -19,3 +19,24 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
 };
 
+export const actions: Actions = {
+    delete: async ({ request, locals }) => {
+        const { user } = locals;
+        if (!user) throw redirect(302, "/signin");
+        const formData = await request.formData();
+
+        const budgetItemId = formData.get("budgetItemId") as string;
+
+        try {
+            const budgetItemService = new BudgetItemService();
+            await budgetItemService.delete(budgetItemId, user.userId);
+        } catch (e) {
+            console.log(e);
+            return fail(500, {
+                message: "An error occurred"
+            });
+        }
+
+        throw redirect(302, "/budget");
+    }
+};
