@@ -5,8 +5,9 @@ export const createTransactionSchema = z.object({
     title: z.string(),
     description: z.string().optional(),
     amount: z.number(),
-    transaction_type: z.nativeEnum(TransactionType),
-    date: z.date()
+    transactionType: z.nativeEnum(TransactionType),
+    date: z.date(),
+    userId: z.string()
 })
 
 export type CreateTransaction = z.infer<typeof createTransactionSchema>;

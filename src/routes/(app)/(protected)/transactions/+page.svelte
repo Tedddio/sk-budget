@@ -69,10 +69,10 @@
                                 >
                                 <td
                                     class="px-4 py-3 text-lg text-gray-900 {getTransactionTypeColor(
-                                        transaction.transaction_type,
+                                        transaction.transactionType,
                                     )}"
                                     >{capitalizeFirstLetter(
-                                        transaction.transaction_type,
+                                        transaction.transactionType,
                                     )}</td
                                 >
                             </tr>

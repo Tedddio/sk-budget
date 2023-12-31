@@ -1,7 +1,7 @@
 <script lang="ts">
     import { enhance } from "$app/forms";
     import { capitalizeFirstLetter } from "$lib/helpers/stringHelper";
-    import { TransactionType } from "@prisma/client";
+    import { BudgetItemFrequency, TransactionType } from "@prisma/client";
     import Alert from "$lib/components/Alert.svelte";
     import type { ActionData } from "./$types";
     import InputError from "$lib/components/InputError.svelte";
@@ -12,7 +12,7 @@
 <h2
     class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
 >
-    New Transaction
+    New Budget Item
 </h2>
 
 <div class="mt-10 w-full max-w-md mx-auto">
@@ -94,21 +94,27 @@
 
         <div>
             <label
-                for="date"
+                for="transactionType"
                 class="block text-sm font-medium leading-6 text-gray-900"
-                >Date</label
+                >Frequency</label
             >
             <div class="mt-2">
-                <input
-                    id="date"
-                    name="date"
-                    type="date"
+                <select
+                    id="frequency"
+                    name="frequency"
                     required
                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-                <InputError errors={form?.errors?.date?._errors} />
+                >
+                    {#each Object.values(BudgetItemFrequency) as frequency}
+                        <option value={frequency}
+                            >{capitalizeFirstLetter(frequency)}</option
+                        >
+                    {/each}
+                </select>
+                <InputError errors={form?.errors?.transactionType?._errors} />
             </div>
         </div>
+
         <div>
             <button
                 type="submit"

@@ -3,11 +3,12 @@ import type { CreateTransaction } from "$lib/schemas/transactionSchema";
 import type { TransactionsWithTotal } from "$lib/types/Transactions";
 import { TransactionType, type Transaction } from "@prisma/client";
 
+
 export default class TransactionService {
     async getAllWithTotal(userId: string): Promise<TransactionsWithTotal> {
         const transactions = await prisma.$queryRaw<Transaction[]>`
             SELECT * FROM "Transaction"
-            WHERE user_id = ${userId}
+            WHERE "userId" = ${userId}
             ORDER BY date asc`;
         return {
             transactions,
@@ -15,18 +16,15 @@ export default class TransactionService {
         }
     }
 
-    async create(transaction: CreateTransaction, userId: string) {
+    async create(transaction: CreateTransaction) {
         await prisma.transaction.create({
-            data: {
-                ...transaction,
-                user_id: userId
-            }
+            data: transaction
         });
     }
 
     private calculateTotal(transactions: Transaction[]): number {
         const reducer = (accumulator: number, item: Transaction) => {
-            if (item.transaction_type == TransactionType.EXPENSE) {
+            if (item.transactionType == TransactionType.EXPENSE) {
                 return accumulator - item.amount;
             }
             return accumulator + item.amount;

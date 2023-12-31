@@ -2,57 +2,77 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
+
 model User {
-  id           String    @id @unique
-  email        String    @unique
-  firstname   String
-  lastname   String
-  auth_session Session[]
-  key          Key[]
-  transactions Transaction[]
+    id           String        @id @unique
+    email        String        @unique
+    firstname    String
+    lastname     String
+    auth_session Session[]
+    key          Key[]
+    transactions Transaction[]
+    budgetItems BudgetItem[]
 }
 
 model Session {
-  id             String @id @unique
-  user_id        String
-  active_expires BigInt
-  idle_expires   BigInt
-  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    id             String @id @unique
+    user_id        String
+    active_expires BigInt
+    idle_expires   BigInt
+    user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-  @@index([user_id])
+    @@index([user_id])
 }
 
 model Key {
-  id              String  @id @unique
-  hashed_password String?
-  user_id         String
-  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    id              String  @id @unique
+    hashed_password String?
+    user_id         String
+    user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-  @@index([user_id])
+    @@index([user_id])
 }
 
 model Transaction {
-  id              String  @id @unique @default(uuid())
-  title           String
-  description     String?
-  transaction_type TransactionType @default(EXPENSE)
-  amount          Float
-  date           DateTime @default(now())
-  user_id         String
-  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+    id               String          @id @unique @default(uuid())
+    title            String
+    description      String?
+    transactionType TransactionType @default(EXPENSE)
+    amount           Float
+    date             DateTime        @default(now())
+    userId          String
+    user             User            @relation(references: [id], fields: [userId], onDelete: Cascade)
 
-  @@index([user_id])
+    @@index([userId])
 }
 
+model BudgetItem {
+    id               String              @id @unique @default(uuid())
+    title            String
+    description      String?
+    transactionType TransactionType     @default(EXPENSE)
+    frequency         BudgetItemFrequency @default(MONTHLY)
+    amount           Float
+    userId          String
+    user             User                @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+    @@index([userId])
+}
 
 enum TransactionType {
-  EXPENSE
-  INCOME
+    EXPENSE
+    INCOME
+}
+
+enum BudgetItemFrequency {
+    WEEKLY
+    MONTHLY
+    YEARLY
 }

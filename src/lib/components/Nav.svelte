@@ -34,6 +34,7 @@
             <a href="/transactions" class="mr-5 hover:text-gray-900"
                 >Transactions</a
             >
+            <a href="/budget" class="mr-5 hover:text-gray-900">Budget</a>
         </nav>
         {#if user}
             <form method="POST">
